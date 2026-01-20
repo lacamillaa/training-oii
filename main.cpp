@@ -58,5 +58,12 @@ int main() {
         cout << i << " ";
     }
     cout << endl;
+
+    // v1 = { 3, 5, 6 }
+    cout << *(v1.begin() + 2) << " "; // 6 (terzo elemento)
+    cout << *(v1.rbegin() + 2) << " "; // 3 (terzultimo elemento)
+    cout << *(v1.end() - 2) << " "; // 5 (penultimo elemento)
+    cout << *(v1.rend() - 1) << " "; // 3 (primo elemento)
+    cout << endl;
     return 0;
 }
