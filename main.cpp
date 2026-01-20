@@ -65,5 +65,21 @@ int main() {
     cout << *(v1.end() - 2) << " "; // 5 (penultimo elemento)
     cout << *(v1.rend() - 1) << " "; // 3 (primo elemento)
     cout << endl;
+
+    v1.push_back(8); // aggiunge un 8 alla fine
+    for (int i : v1) {
+        cout << i << " ";
+    }
+    cout << endl;
+    v1.erase(v1.begin()); // elimina il primo elemento
+    for (int i : v1) {
+        cout << i << " ";
+    }
+    cout << endl;
+    v1.pop_back(); // elimina l'ultimo elemento
+    for (int i : v1) {
+        cout << i << " ";
+    }
+    cout << endl;
     return 0;
 }
