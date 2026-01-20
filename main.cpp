@@ -46,5 +46,17 @@ int main() {
         unsigned long long size = v1.size();
         cout << "dimensione: " << size << endl;
     }
+
+    // v1 = { 3, 5, 6, 10, 2 }
+    v1.resize(7); // la dimensione sarà ora 7, con (7 - 5) = 2 zeri alla fine
+    for (int i : v1) {
+        cout << i << " ";
+    }
+    cout << endl;
+    v1.resize(3); // gli ultimi 4 elementi saranno eliminati
+    for (int i : v1) {
+        cout << i << " ";
+    }
+    cout << endl;
     return 0;
 }
