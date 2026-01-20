@@ -37,6 +37,14 @@ int main() {
     auto n = *(v1.rend());
     cout << n << " "; // rend -> puntatore all'elemento precedente al primo
     cout << endl;
-    
+
+    // raccomandato usare empty invece di size() > 0
+    if (v1.empty()) {
+        cout << "vuoto" << endl;
+    }
+    else {
+        unsigned long long size = v1.size();
+        cout << "dimensione: " << size << endl;
+    }
     return 0;
 }
