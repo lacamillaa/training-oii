@@ -27,5 +27,16 @@ int main() {
         cout << i << " ";
     }
     cout << endl;
+
+    auto f = *(v1.begin()); // begin -> puntatore al primo elemento valido
+    cout << f << " "; // 3
+    auto e = *(v1.end()); // end -> puntatore al primo elemento non valido
+    cout << e << " "; // valore casuale
+    auto l = *(v1.rbegin()); // rbegin -> ultimo elemento
+    cout << l << " ";
+    auto n = *(v1.rend());
+    cout << n << " "; // rend -> puntatore all'elemento precedente al primo
+    cout << endl;
+    
     return 0;
 }
