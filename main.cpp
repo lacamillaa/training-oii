@@ -81,5 +81,14 @@ int main() {
         cout << i << " ";
     }
     cout << endl;
+
+    v1.erase(v1.begin(), v1.end()); // elimina tutti gli elementi
+    if (v1.empty()) {
+        cout << "vuoto" << endl;
+    }
+    v2.clear(); // elimina tutti gli elementi
+    if (v2.empty()) {
+        cout << "vuoto" << endl;
+    }
     return 0;
 }
