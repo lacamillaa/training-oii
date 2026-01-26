@@ -49,5 +49,18 @@ int main() {
 
     if (s2.contains(4)) cout << "s2 contiene 4" << endl;
 
+    s2.insert({3, 7});
+    ranges::copy(s2, ostream_iterator<int>(cout, " "));
+    cout << endl;
+    auto lb1 = s2.lower_bound(5);
+    cout << *lb1 << " "; // puntatore al primo elemento >= a 5
+    auto lb2 = s2.lower_bound(6);
+    cout << *lb2 << " ";
+
+    auto ub1 = s2.upper_bound(4);
+    cout << *ub1 << " "; // puntatore al primo elemento > 4
+    cout << endl;
+    auto ub2 = s2.upper_bound(7); // puntatore al primo elemento > 7
+    if (ub2 == s2.end()) cout << "7 è l'elemento massimo" << endl;
     return 0;
 }
