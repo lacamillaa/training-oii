@@ -41,5 +41,21 @@ int main() {
         cout << rs2.first->first << " NON è stato inserito" << endl;
     }
 
+    auto rsa1 = map.insert_or_assign('Z', 0);
+    // se 'Z' esiste: modifica il valore assegnato a 'Z'
+    // altrimenti crea una nuova chiave 'Z' con valore 0
+    // rsa1.second == true se il valore è stato inserito
+    // rsa1.second == false se il valore è stato assegnato
+    if (!rsa1.second) {
+        cout << rsa1.first->first << " è stato assegnato" << endl;
+    }
+    auto rsa2 = map.insert_or_assign('y', 10);
+    if (rsa2.second) {
+        cout << rsa2.first->first << " è stato inserito" << endl;
+    }
+    map.insert_or_assign('b', 10);
+    map.insert(pair<char, int>('b', 2)); // insert NON modifica il valore di chiave già esistente
+    print(map);
+
     return 0;
 }
