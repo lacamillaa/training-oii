@@ -57,5 +57,10 @@ int main() {
     map.insert(pair<char, int>('b', 2)); // insert NON modifica il valore di chiave già esistente
     print(map);
 
+    map.erase('Y');
+    map.erase(map.begin());
+    // map.erase(map.begin(), map.end());
+    print(map);
+
     return 0;
 }
