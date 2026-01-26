@@ -68,11 +68,22 @@ int main() {
     if (map.contains('Z')) {
         cout << map.find('Z')->first << " : " << map.find('Z')->second << endl;
     }
-    cout << endl;
     auto pt = map.find('l');
     if (pt == map.end()) {
         cout << 'l' << " NON è stato trovato" << endl;
     }
 
+    auto lb1 = map.lower_bound('F'); // primo elemento con chiave >= F
+    cout << lb1->first << " : " << lb1->second << endl;
+    auto ub1 = map.upper_bound('y'); // primo elemento con chiave > y
+    if (ub1 == map.end()) {
+        cout << 'y' << " è la chiave massima" << endl;
+    }
+    auto [less, more] = map.equal_range('c');
+    // less => map.lower_bound('c')
+    // more => map.upper_bound('c')
+    cout << less->second << " - " << more->second << endl;
+    auto [less2, more2] = map.equal_range('a');
+    cout << less2->second << " - " << more2->second << endl;
     return 0;
 }
