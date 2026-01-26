@@ -17,5 +17,12 @@ int main() {
     fl2.assign(fl1.begin(), fl1.end()); // copia fl1 in fl2
     ranges::copy(fl2, ostream_iterator<int>(cout, " "));
     cout << endl;
+
+    cout << fl1.front() << " ";
+    cout << *fl1.before_begin() << " ";
+    cout << *fl1.begin() << " ";
+    cout << endl;
+    // fl1.end() non è dereferenziabile
+
     return 0;
 }
