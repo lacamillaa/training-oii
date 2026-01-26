@@ -39,7 +39,9 @@ int main() {
     auto last = fl1.erase_after(fl1.begin(), fl1.end());
     // tutti gli elementi tra begin (escluso) & end (escluso) sono eliminati
     // last contiene un puntatore a fl1.end()
-    *fl1.begin() = 6; // modifica il valore del primo elemento della lista
     ranges::copy(fl1, ostream_iterator<int>(cout, " "));
+
+    *fl1.begin() = 5; // il primo elemento della lista sarà 5
+    cout << *fl1.begin() << endl;
     return 0;
 }
