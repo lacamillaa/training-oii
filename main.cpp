@@ -46,6 +46,8 @@ int main() {
     auto p1 = s2.find(2); // puntatore a 2
     auto p2 = s2.find(8); // p2 == end() (8 NON è presente nel set)
     if (p2 == s2.end()) cout << "8 non trovato" << endl;
-    
+
+    if (s2.contains(4)) cout << "s2 contiene 4" << endl;
+
     return 0;
 }
