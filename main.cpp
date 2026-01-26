@@ -30,6 +30,16 @@ int main() {
     fl1.insert_after(fl1.before_begin(), 4, 5); // inserisce 4 volte 5 all'inizio
     fl1.insert_after(fl1.before_begin(), { 3, 2, 1 }); // inserisce la lista data all'inizio
     ranges::copy(fl1, ostream_iterator<int>(cout, " "));
+    cout << endl;
 
+    fl1.push_front(5); // aggiunge 5 all'inizio
+    fl1.pop_front(); // rimuove il primo elemento
+    auto after_erased = fl1.erase_after(fl1.begin());
+    cout << *after_erased << endl; // l'elemento dopo quello eliminato (o end())
+    auto last = fl1.erase_after(fl1.begin(), fl1.end());
+    // tutti gli elementi tra begin (escluso) & end (escluso) sono eliminati
+    // last contiene un puntatore a fl1.end()
+    *fl1.begin() = 6; // modifica il valore del primo elemento della lista
+    ranges::copy(fl1, ostream_iterator<int>(cout, " "));
     return 0;
 }
