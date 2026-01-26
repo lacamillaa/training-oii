@@ -39,5 +39,13 @@ int main() {
     s2.erase(7); // elimina l'elemento 7 dal set
     ranges::copy(s2, ostream_iterator<int>(cout, " "));
     cout << endl;
+
+    cout << s2.count(9) << " "; // 0 (9 NON è presente nel set)
+    cout << s2.count(2) << endl; // 1 (2 è presente nel set)
+
+    auto p1 = s2.find(2); // puntatore a 2
+    auto p2 = s2.find(8); // p2 == end() (8 NON è presente nel set)
+    if (p2 == s2.end()) cout << "8 non trovato" << endl;
+    
     return 0;
 }
