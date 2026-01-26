@@ -26,5 +26,10 @@ int main() {
 
     cout << *next(fl1.begin()) << endl; // puntatore all'elemento dopo begin()
 
+    fl1.insert_after(fl1.begin(), 4); // inserisce 4 dopo il primo elemento
+    fl1.insert_after(fl1.before_begin(), 4, 5); // inserisce 4 volte 5 all'inizio
+    fl1.insert_after(fl1.before_begin(), { 3, 2, 1 }); // inserisce la lista data all'inizio
+    ranges::copy(fl1, ostream_iterator<int>(cout, " "));
+
     return 0;
 }
