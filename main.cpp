@@ -24,5 +24,7 @@ int main() {
     cout << endl;
     // fl1.end() non è dereferenziabile
 
+    cout << *next(fl1.begin()) << endl; // puntatore all'elemento dopo begin()
+
     return 0;
 }
