@@ -34,5 +34,10 @@ int main() {
     else {
         cout << *result2.first << " non è stato inserito" << endl;
     }
+
+    s2.erase(s2.begin());
+    s2.erase(7); // elimina l'elemento 7 dal set
+    ranges::copy(s2, ostream_iterator<int>(cout, " "));
+    cout << endl;
     return 0;
 }
