@@ -62,5 +62,17 @@ int main() {
     // map.erase(map.begin(), map.end());
     print(map);
 
+    cout << map.count('X') << " "; // 1
+    cout << map.count('c') << " "; // 0
+    cout << endl;
+    if (map.contains('Z')) {
+        cout << map.find('Z')->first << " : " << map.find('Z')->second << endl;
+    }
+    cout << endl;
+    auto pt = map.find('l');
+    if (pt == map.end()) {
+        cout << 'l' << " NON è stato trovato" << endl;
+    }
+
     return 0;
 }
