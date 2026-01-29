@@ -35,8 +35,9 @@ int calcola(int Dx, int Dy, int Ds, int Bx, int By, int Bs, char dir) {
     int T = 0;
     int delta, Bsx, Bsy, Dsx, Dsy;
     char dogDir;
+    if (Bx == Dx && By == Dy) return 0;
+    if (Bs == 0 && Ds == 0) return -1;
     if (Bs == 0) {
-        if (Ds == 0 && !(Bx == Dx && By == Dy)) return -1;
         int dist = abs(Bx - Dx) + abs(By - Dy);
         double t = dist / static_cast<double>(Ds);
         return ceil(t);
@@ -67,7 +68,15 @@ int calcola(int Dx, int Dy, int Ds, int Bx, int By, int Bs, char dir) {
         if (Bsx != 0) t2 = delta / (double)Dsy;
         else t2 = delta / (double)Dsx;
     }
-    directions(Ds, dir, &Dsx, &Dsy);
+    if (Bsx != 0) {
+        if (Dx > Bx) dogDir = 'L';
+        else dogDir = 'R';
+    }
+    if (Bsy != 0) {
+        if (Dy > By) dogDir = 'D';
+        else dogDir = 'U';
+    }
+    directions(Ds, dogDir, &Dsx, &Dsy);
     double X2 = Bx + Bsx * t2;
     double Y2 = By + Bsy * t2;
     double t1;
