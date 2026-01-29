@@ -31,6 +31,57 @@ void directions(int s, char dir, int *sx, int *sy) {
     }
 }
 
+int calcola(int Dx, int Dy, int Ds, int Bx, int By, int Bs, char dir) {
+    int T = 0;
+    int delta, Bsx, Bsy, Dsx, Dsy;
+    char dogDir;
+    if (Bs == 0) {
+        if (Ds == 0 && !(Bx == Dx && By == Dy)) return -1;
+        int dist = abs(Bx - Dx) + abs(By - Dy);
+        double t = dist / static_cast<double>(Ds);
+        return ceil(t);
+    }
+    directions(Bs, dir, &Bsx, &Bsy);
+    if (Bsx != 0) {
+        // allinea Y
+        if (Dy > By) dogDir = 'D';
+        else dogDir = 'U';
+    }
+    else {
+        if (Dx > Bx) dogDir = 'L';
+        else dogDir = 'R';
+    }
+    directions(Ds, dogDir, &Dsx, &Dsy);
+    if (Bsx != 0) {
+        delta = By - Dy;
+    }
+    else {
+        delta = Bx - Dx;
+    }
+    double t2;
+    if (Ds == 0) {
+        if (delta != 0) return -1;
+        t2 = 0;
+    }
+    else {
+        if (Bsx != 0) t2 = delta / (double)Dsy;
+        else t2 = delta / (double)Dsx;
+    }
+    directions(Ds, dir, &Dsx, &Dsy);
+    double X2 = Bx + Bsx * t2;
+    double Y2 = By + Bsy * t2;
+    double t1;
+    if (Bsx != 0) {
+        t1 = (Dx - X2) / static_cast<double>(Bsx - Dsx);
+    }
+    else {
+        t1 = (Dy - Y2) / static_cast<double>(Bsy - Dsy);
+    }
+    if (t1 < 0) return -1;
+    T = ceil(t1 + t2);
+    return T;
+}
+
 int main() {
     ifstream cin("input.txt");
     ofstream cout("output.txt");
@@ -44,66 +95,7 @@ int main() {
     char dir;
     cin >> dir;
 
-    int T = 0;
-
-    int Dsx, Dsy; // vettori della velocità del cane
-    int Bsx, Bsy; // vettori della velocità della palla
-    directions(Bs, dir, &Bsx, &Bsy);
-    // cout << Bsx << " " << Bsy << endl;
-
-    char dogDir;
-    if (Bsx == 0) {
-        // la palla si sta muovendo in verticale
-        // decidi se fare andare il cane a sx o dx
-        if (Dx > Bx) {
-            dogDir = 'L';
-        }
-        else {
-            dogDir = 'R';
-        }
-    }
-    if (Bsy == 0) {
-        if (Dy > By) {
-            dogDir = 'D';
-        }
-        else {
-            dogDir = 'U';
-        }
-    }
-    directions(Ds, dogDir, &Dsx, &Dsy);
-    // cout << Dsx << " " << Dsy << endl;
-
-    double t1; // tempo richiesto per allineare il cane con la palla
-    if (Bsx == 0) {
-        t1 = (double)(Bx - Dx) / (double)Dsx;
-    }
-    if (Bsy == 0) {
-        t1 = (double)(By - Dy) / (double)Dsy;
-    }
-
-    // cout << t1 << endl;
-
-    double X2 = Bx + Bsx * t1;
-    double Y2 = By + Bsy * t1;
-    // cout << X2 << " " << Y2 << endl;
-
-    dogDir = dir;
-    directions(Ds, dogDir, &Dsx, &Dsy); // direzione cane = direzione palla
-
-    double t2;
-    if (Bsx == 0) {
-        t2 = (Y2 - Dy) / (double)(Dsy - Bsy);
-    }
-    if (Bsy == 0) {
-        t2 = (X2 - Dx) / (double)(Dsx - Bsy);
-    }
-
-    // cout << t2 << endl;
-
-    if (t2 < 0) T = -1;
-    else {
-        T = ceil(t1 + t2);
-    }
+    int T = calcola(Dx, Dy, Ds, Bx, By, Bs, dir);
 
     cout << T << endl;
 
