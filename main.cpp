@@ -2,31 +2,28 @@
 #include <cassert>
 #include <cmath>
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
-bool is_cabala(long long n) {
-    if (n < 10 && n % 3 == 0) return true;
-    int ultima = n % 10;
-    int penultima = n % 100 / 10;
-    if (penultima != ultima && ultima % 3 == 0 && ultima != 0 && is_cabala(n / 10)) return true;
-    return false;
+void gen_cabala(long long *R, int M, vector<long long>& res, long long I, int p, int P) {
+    if (p == P) return;
+    for (int i = 3; i < 10; i += 3) {
+        if (I % 10 != i) {
+            long long n = I * 10 + i;
+            res.push_back(n);
+            gen_cabala(R, M, res, n, p + 1, P);
+            *R = max(*R, n % M);
+        }
+    }
 }
 
 long long occulta(int N, int M) {
-    // N => numero massimo di cifre
     long long R = 0;
-    for (int m = M - 1; m >= 0; m--) {
-        // esplora ogni possibile resto
-        for (long long n = m; n < static_cast<long long>(pow(10, N)); n += M) {
-            if (is_cabala(n)) {
-                R = max(R, n % M);
-            };
-        }
-    }
+    vector<long long> res;
+    gen_cabala(&R, M, res, 0, 0, N);
     return R;
 }
-
 
 int main() {
     FILE *fr = fopen("input.txt", "r");
