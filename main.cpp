@@ -15,9 +15,10 @@ bool is_cabala(long long n) {
 long long occulta(int N, int M) {
     // N => numero massimo di cifre
     long long R = 0;
-    for (long long i = 0; i < static_cast<long long>(pow(10, N)); i++) {
-        if (is_cabala(i)) {
-            R = max(R, i % M);
+    for (int m = M - 1; m >= 0; m--) {
+        // esplora ogni possibile resto
+        for (int n = m; n < pow(10, N); n += M) {
+            if (is_cabala(n)) return m;
         }
     }
     return R;
