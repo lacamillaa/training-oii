@@ -1,3 +1,4 @@
+#include <array>
 #include <cmath>
 #include <fstream>
 #include <iostream>
@@ -31,60 +32,83 @@ void directions(int s, char dir, int *sx, int *sy) {
     }
 }
 
+double select(array<double, 2>& from) {
+    // -1, -1 => -1
+    // 0, -1 => 0
+    // -1, 0 => 0
+    // 3, 2 => 2
+    if (max(from[0], from[1]) < 0) return -1;
+    if (from[0] < 0) return from[1];
+    if (from[1] < 0) return from[0];
+    return min(from[0], from[1]);
+}
+
 int calcola(int Dx, int Dy, int Ds, int Bx, int By, int Bs, char dir) {
     int T = 0;
     int delta, Bsx, Bsy, Dsx, Dsy;
+    int *ds;
     char dogDir;
-    if (Bx == Dx && By == Dy) return 0;
-    if (Bs == 0 && Ds == 0) return -1;
-    if (Bs == 0) {
-        int dist = abs(Bx - Dx) + abs(By - Dy);
-        double t = dist / static_cast<double>(Ds);
-        return ceil(t);
-    }
     directions(Bs, dir, &Bsx, &Bsy);
-    if (Bsx != 0) {
-        // allinea Y
-        if (Dy > By) dogDir = 'D';
-        else dogDir = 'U';
+    if (Bsx == 0 && Bsy == 0) {
+        double r = 0;
+        r += abs(Dx - Bx) + abs(Dy - By);
+        r /= static_cast<double>(Ds);
+        return ceil(r);
     }
-    else {
-        if (Dx > Bx) dogDir = 'L';
-        else dogDir = 'R';
+    if (Bsx == 0) {
+        delta = Bx - Dx;
+        if (delta >= 0) dogDir = 'R';
+        else dogDir = 'L';
+        ds = &Dsx;
+    } else {
+        delta = By - Dy;
+        if (delta >= 0) dogDir = 'U';
+        else dogDir = 'D';
+        ds = &Dsy;
     }
     directions(Ds, dogDir, &Dsx, &Dsy);
-    if (Bsx != 0) {
-        delta = By - Dy;
-    }
-    else {
-        delta = Bx - Dx;
-    }
     double t2;
-    if (Ds == 0) {
+    if (*ds == 0) {
         if (delta != 0) return -1;
         t2 = 0;
     }
     else {
-        if (Bsx != 0) t2 = delta / (double)Dsy;
-        else t2 = delta / (double)Dsx;
+        t2 = delta / static_cast<double>(*ds);
     }
-    if (Bsx != 0) {
-        if (Dx > Bx) dogDir = 'L';
-        else dogDir = 'R';
-    }
-    if (Bsy != 0) {
-        if (Dy > By) dogDir = 'D';
-        else dogDir = 'U';
-    }
-    directions(Ds, dogDir, &Dsx, &Dsy);
-    double X2 = Bx + Bsx * t2;
-    double Y2 = By + Bsy * t2;
     double t1;
-    if (Bsx != 0) {
-        t1 = (Dx - X2) / static_cast<double>(Bsx - Dsx);
+    if (Bsx == 0) {
+        array<char, 2> dirs = {'U', 'D'};
+        array<double, 2> dt = {0, 0};
+        for (int i = 0; i < 2; i++) {
+            double t1;
+            directions(Ds, dirs[i], &Dsx, &Dsy);
+            if (Bsy == Dsy) {
+                if (Dy - By == t2 * Bsy) t1 = 0;
+                else t1 = -1;
+            }
+            else {
+                t1 = (Dy - By - t2 * Bsy) / (Bsy - Dsy);
+            }
+            dt[i] = t1;
+        }
+        t1 = select(dt);
     }
     else {
-        t1 = (Dy - Y2) / static_cast<double>(Bsy - Dsy);
+        array<char, 2> dirs = {'L', 'R'};
+        array<double, 2> dt = {0, 0};
+        for (int i = 0; i < 2; i++) {
+            double t1;
+            directions(Ds, dirs[i], &Dsx, &Dsy);
+            if (Bsx == Dsx) {
+                if (Dx - Bx == t2 * Bsx) t1 = 0;
+                else t1 = -1;
+            }
+            else {
+                t1 = (Dx - Bx - t2 * Bsx) / (Bsx - Dsx);
+            }
+            dt[i] = t1;
+        }
+        t1 = select(dt);
     }
     if (t1 < 0) return -1;
     T = ceil(t1 + t2);
