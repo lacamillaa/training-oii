@@ -22,6 +22,7 @@ void solve(int t) {
 
     if (K == 1) {
         cout << "Case #" << t << ": " << (*C.rbegin() - *C.begin()) << endl;
+        return;
     }
 
     set<pair<int, int>> dist;
@@ -31,7 +32,7 @@ void solve(int t) {
     }
 
     vector<int> B;
-    for (int i = 0; i < N - K - 1; i++) {
+    for (int i = 0; i < K - 1; i++) {
         auto last = *dist.rbegin();
         B.push_back(last.second);
         dist.erase(last);
