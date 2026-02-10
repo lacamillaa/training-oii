@@ -1,5 +1,6 @@
 // NOTE: it is recommended to use this even if you don't understand the following code.
 
+#include <algorithm>
 #include <fstream>
 #include <iostream>
 #include <string>
@@ -12,6 +13,9 @@ int main() {
     ifstream cin("input.txt");
     ofstream cout("output.txt");
 
+    vector<int> v;
+    // insieme di dolci con il frutto == P
+
     int N, P;
     cin >> N >> P;
 
@@ -20,26 +24,33 @@ int main() {
         cin >> S[i];
 
     vector<int> F(N);
-    for (int i = 0; i < N; ++i)
+    for (int i = 0; i < N; ++i) {
         cin >> F[i];
+        if (F[i] == P) {
+            v.push_back(S[i]);
+        }
+    }
+
+    sort(v.begin(), v.end());
 
     int Q;
     cin >> Q;
 
     vector<int> l(Q), r(Q), k(Q);
-    for (int i = 0; i < Q; ++i)
+    for (int i = 0; i < Q; ++i) {
         cin >> l[i] >> r[i] >> k[i];
+    }
 
     vector<string> answer(Q);
 
-    vector<int> valid_desserts;
-
     for (int q = 0; q < Q; q++) {
         int count = 0;
-        for (int d = 0; d < N; d++) {
-            if (S[d] >= l[q] && S[d] <= r[q] && F[d] == P) {
-                count++;
-            }
+        auto ptr = find_if(v.begin(), v.end(), [l, r, q](int s) {
+            return s >= l[q] && s <= r[q];
+        });
+        while (ptr != v.end() && *ptr <= r[q]) {
+            count++;
+            ++ptr;
         }
         if (count >= k[q]) answer[q] = "YES";
         else answer[q] = "NO";
