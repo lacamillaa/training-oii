@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <fstream>
 #include <iostream>
+#include <map>
 #include <string>
 #include <vector>
 
@@ -13,51 +14,43 @@ int main() {
     ifstream cin("input.txt");
     ofstream cout("output.txt");
 
-    vector<int> v;
-    // insieme di dolci con il frutto == P
+    map<int, int> m;
+    // coppie <dolcezza, conteggio> (frutto = P)
 
     int N, P;
     cin >> N >> P;
 
     vector<int> S(N);
-    for (int i = 0; i < N; ++i)
+    for (int i = 0; i < N; ++i) {
         cin >> S[i];
+    }
 
     vector<int> F(N);
     for (int i = 0; i < N; ++i) {
         cin >> F[i];
         if (F[i] == P) {
-            v.push_back(S[i]);
+            m[S[i]]++;
         }
     }
-
-    sort(v.begin(), v.end());
 
     int Q;
     cin >> Q;
 
+    vector<string> answer(Q);
+
     vector<int> l(Q), r(Q), k(Q);
     for (int i = 0; i < Q; ++i) {
         cin >> l[i] >> r[i] >> k[i];
-    }
-
-    vector<string> answer(Q);
-
-    for (int q = 0; q < Q; q++) {
-        int count = 0;
-        auto ptr = find_if(v.begin(), v.end(), [l, r, q](int s) {
-            return s >= l[q] && s <= r[q];
-        });
-        while (ptr != v.end() && *ptr <= r[q]) {
-            count++;
-            ++ptr;
+        auto ptrS = m.lower_bound(l[i]);
+        auto ptrF = m.upper_bound(r[i]);
+        long long count = 0;
+        while (ptrS != ptrF) {
+            count += ptrS->second;
+            ++ptrS;
         }
-        if (count >= k[q]) answer[q] = "YES";
-        else answer[q] = "NO";
+        if (count >= k[i]) answer[i] = "YES";
+        else answer[i] = "NO";
     }
-
-
-    // INSERT YOUR CODE HERE
 
 
     for (int i = 0; i < Q; ++i)
