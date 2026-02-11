@@ -25,25 +25,23 @@ int main() {
             cin >> G[i];
         }
 
-        int scelta = 0;
-        int val_attuale = V[0];
-        int obiettivo = val_attuale + N * G[0];
+        int val_previsto = 0;
 
-        for (int i = 1; i < N; i++) {
-            val_attuale += G[scelta];
-            // val_previsto = valore previsto con l'investimento del giorno i
-            int val_previsto = V[i] + (N - i) * G[i];
-            if (val_attuale >= V[i] && val_previsto > obiettivo) {
-                // effettua la tua scelta
-                val_attuale = V[i];
-                scelta = i;
-                obiettivo = val_previsto;
+        for (int i = 0; i < N; i++) {
+            int v_p = V[i] + G[i] * (N - i);
+            bool att = false;
+            for (int j = 0; j < i; j++) {
+                if (V[i] <= V[j] + G[j] * (i - j)) {
+                    att = true;
+                    break;
+                }
+            }
+            if (att && v_p >= val_previsto) {
+                val_previsto = v_p;
             }
         }
 
-
-        cout << "Case #" << test << ": ";
-        cout << obiettivo << endl;
+        cout << "Case #" << test << ": " << val_previsto << endl;
     }
 
     return 0;
