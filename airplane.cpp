@@ -3,25 +3,41 @@
 #include <cmath>
 #include <fstream>
 #include <iostream>
+#include <stack>
 #include <string>
 #include <vector>
+#include <tuple>
 
 using namespace std;
 
-bool solve(int x, int y, int s, int i, int w, int h, vector<int>& X, vector<int>& S, vector<int>& E) {
-    if (y < 0 || y >= h) return false;
-    if (x == w - 1) return true;
-    if (x == X[i] && (y > E[i] || y < S[i])) return false;
-    if (x == X[i]) return solve(x, y, s, i + 1, w, h, X, S, E);
-    vector<int> ds;
-    if (y < S[i]) ds = {0, 1};
-    else if (y > E[i]) ds = {0, -1};
-    else ds = {0, 1, -1};
-    bool res = false;
-    for (auto d : ds) {
-        res = res || solve(x + 1, y + s + d, s + d, i, w, h, X, S, E);
+bool solve(int h, int w, vector<int>& X, vector<int>& S, vector<int>& E) {
+    int x = 0;
+    int y = floor(h / 2);
+    // esegui un dfs sugli stati possibili { x, y, v }
+    stack<tuple<int, int, int>> q;
+    q.push(make_tuple(x, y, 0));
+    while (!q.empty()) {
+        // condizioni:
+        auto t = q.top();
+        q.pop();
+        int x1 = get<0>(t);
+        int y1 = get<1>(t);
+        int v1 = get<2>(t);
+        // condizioni:
+        // non sia sul muro
+        // non sia fuori dai limiti
+        if (y1 < 0 || y1 >= h) continue;
+        auto p = lower_bound(X.begin(), X.end(), x1);
+        if (p != X.end() && *p == x1) {
+            int pos = p - X.begin();
+            if (y1 < S[pos] || y1 > E[pos]) continue;
+        }
+        if (x1 == w - 1) return true;
+        for (auto delta : { -1, 0, 1 }) {
+            q.push(make_tuple(x1 + 1, y1 + v1 + delta, v1 + delta));
+        }
     }
-    return res;
+    return false;
 }
 
 int main() {
@@ -50,7 +66,7 @@ int main() {
         string ans = "";
 
 
-        bool s = solve(0, ceil(H / 2), 0, 0, N, H, x_wall, start_hole, end_hole);
+        bool s = solve(H, N, x_wall, start_hole, end_hole);
         if (s) ans = "YES";
         else ans = "NO";
 
