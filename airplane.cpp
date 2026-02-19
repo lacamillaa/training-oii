@@ -70,6 +70,16 @@ int main() {
         for (int i = 0; i < W; ++i)
             cin >> end_hole[i];
 
+        for (int i = 0; i < W; i++) {
+            for (int j = i + 1; j < W; j++) {
+                if (x_wall[i] > x_wall[j]) {
+                    swap(x_wall[i], x_wall[j]);
+                    swap(start_hole[i], start_hole[j]);
+                    swap(end_hole[i], end_hole[j]);
+                }
+            }
+        }
+
         string ans = "";
 
 
