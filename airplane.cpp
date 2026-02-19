@@ -3,6 +3,7 @@
 #include <cmath>
 #include <fstream>
 #include <iostream>
+#include <set>
 #include <stack>
 #include <string>
 #include <vector>
@@ -13,6 +14,7 @@ using namespace std;
 bool solve(int h, int w, vector<int>& X, vector<int>& S, vector<int>& E) {
     int x = 0;
     int y = floor(h / 2);
+    set<tuple<int,int,int>> visited;
     // esegui un dfs sugli stati possibili { x, y, v }
     stack<tuple<int, int, int>> q;
     q.push(make_tuple(x, y, 0));
@@ -34,7 +36,12 @@ bool solve(int h, int w, vector<int>& X, vector<int>& S, vector<int>& E) {
         }
         if (x1 == w - 1) return true;
         for (auto delta : { -1, 0, 1 }) {
-            q.push(make_tuple(x1 + 1, y1 + v1 + delta, v1 + delta));
+            if (abs(v1 + delta) > h) continue;
+            auto t1 = make_tuple(x1 + 1, y1 + v1 + delta, v1 + delta);
+            if (!visited.count(t1)) {
+                visited.insert(t1);
+                q.push(t1);
+            }
         }
     }
     return false;
