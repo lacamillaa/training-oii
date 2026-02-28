@@ -5,41 +5,34 @@
 #include <set>
 using namespace std;
 
-vector<set<int>> adj;
-set<int> da_raggiungere;
+vector<set<int>> zone;
+vector<int> nodi;
+int last_returned;
 
 void inizia(int N) {
-    adj.resize(N);
+    last_returned = N;
+    zone.resize(N);
+    nodi.resize(N);
     for (int i = 0; i < N; i++) {
-        da_raggiungere.insert(i);
+        zone[i] = {i};
+        nodi[i] = i;
     }
 }
 
-int collega(int X, int Y) {
-    adj[X].insert(Y);
-    adj[Y].insert(X);
-    int zone = 0;
-    set<int> visitati = {};
-    set dr2(da_raggiungere);
-    queue<int> neighbours;
-    while (!dr2.empty()) {
-        auto start = dr2.begin();
-        neighbours.push(*start);
-        dr2.erase(start);
-        while (!neighbours.empty()) {
-            int u = neighbours.front();
-            neighbours.pop();
-            visitati.insert(u);
-            for (int v : adj[u]) {
-                if (!visitati.count(v)) {
-                    neighbours.push(v);
-                    dr2.erase(v);
-                }
-            }
-        }
-        zone++;
+int collega(int a, int b) {
+    int A = nodi[a];
+    int B = nodi[b];
+    if (A == B) return last_returned;
+    for (auto n : zone[B]) {
+        nodi[n] = A;
+        zone[A].insert(n);
     }
-    return zone;
+    set<int> uniques;
+    for (auto n : nodi) {
+        uniques.insert(n);
+    }
+    last_returned = static_cast<int>(uniques.size());
+    return last_returned;
 }
 
 /*
@@ -59,4 +52,5 @@ int main() {
     }
 
     return 0;
-} */
+}
+*/
