@@ -5,16 +5,15 @@
 #include <set>
 using namespace std;
 
-vector<set<int>> zone;
 vector<int> nodi;
+vector<set<int>> adj;
 int last_returned;
 
 void inizia(int N) {
     last_returned = N;
-    zone.resize(N);
     nodi.resize(N);
+    adj.resize(N);
     for (int i = 0; i < N; i++) {
-        zone[i] = {i};
         nodi[i] = i;
     }
 }
@@ -25,10 +24,22 @@ int collega(int a, int b) {
     if (A == B) {
         return last_returned;
     };
-    for (auto n : zone[B]) {
-        nodi[n] = A;
-        zone[A].insert(n);
+    queue<int> neighbors;
+    set<int> visited;
+    neighbors.push(b);
+    while (!neighbors.empty()) {
+        int u = neighbors.front();
+        neighbors.pop();
+        nodi[u] = a;
+        visited.insert(u);
+        for (int v : adj[u]) {
+            if (!visited.count(v)) {
+                neighbors.push(v);
+            }
+        }
     }
+    adj[a].insert(b);
+    adj[b].insert(a);
     last_returned--;
     return last_returned;
 }
