@@ -22,16 +22,14 @@ void inizia(int N) {
 int collega(int a, int b) {
     int A = nodi[a];
     int B = nodi[b];
-    if (A == B) return last_returned;
+    if (A == B) {
+        return last_returned;
+    };
     for (auto n : zone[B]) {
         nodi[n] = A;
         zone[A].insert(n);
     }
-    set<int> uniques;
-    for (auto n : nodi) {
-        uniques.insert(n);
-    }
-    last_returned = static_cast<int>(uniques.size());
+    last_returned--;
     return last_returned;
 }
 
@@ -52,5 +50,4 @@ int main() {
     }
 
     return 0;
-}
-*/
+}*/
