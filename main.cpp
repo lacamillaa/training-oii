@@ -24,22 +24,22 @@ int collega(int a, int b) {
     if (A == B) {
         return last_returned;
     }
-    adj[a].insert(b);
-    adj[b].insert(a);
     queue<int> neighbors;
     set<int> visited;
     neighbors.push(b);
     while (!neighbors.empty()) {
         int u = neighbors.front();
         neighbors.pop();
-        nodi[u] = a;
         visited.insert(u);
+        nodi[u] = nodi[a];
         for (int v : adj[u]) {
             if (!visited.count(v)) {
                 neighbors.push(v);
             }
         }
     }
+    adj[a].insert(b);
+    adj[b].insert(a);
     last_returned--;
     return last_returned;
 }
