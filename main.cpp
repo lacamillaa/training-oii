@@ -23,7 +23,9 @@ int collega(int a, int b) {
     int B = nodi[b];
     if (A == B) {
         return last_returned;
-    };
+    }
+    adj[a].insert(b);
+    adj[b].insert(a);
     queue<int> neighbors;
     set<int> visited;
     neighbors.push(b);
@@ -38,8 +40,6 @@ int collega(int a, int b) {
             }
         }
     }
-    adj[a].insert(b);
-    adj[b].insert(a);
     last_returned--;
     return last_returned;
 }
