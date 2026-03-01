@@ -5,41 +5,28 @@
 #include <set>
 using namespace std;
 
-vector<int> nodi;
-vector<set<int>> adj;
+vector<int> parents;
 int last_returned;
 
 void inizia(int N) {
     last_returned = N;
-    nodi.resize(N);
-    adj.resize(N);
+    parents.resize(N);
     for (int i = 0; i < N; i++) {
-        nodi[i] = i;
+        parents[i] = i;
     }
 }
 
+int find_parent(int x) {
+    if (x == parents[x]) return x;
+    parents[x] = find_parent(parents[x]);
+    return parents[x];
+}
+
 int collega(int a, int b) {
-    int A = nodi[a];
-    int B = nodi[b];
-    if (A == B) {
-        return last_returned;
-    }
-    queue<int> neighbors;
-    set<int> visited;
-    neighbors.push(b);
-    while (!neighbors.empty()) {
-        int u = neighbors.front();
-        neighbors.pop();
-        visited.insert(u);
-        nodi[u] = nodi[a];
-        for (int v : adj[u]) {
-            if (!visited.count(v)) {
-                neighbors.push(v);
-            }
-        }
-    }
-    adj[a].insert(b);
-    adj[b].insert(a);
+    int A = find_parent(a);
+    int B = find_parent(b);
+    if (A == B) return last_returned;
+    parents[B] = A;
     last_returned--;
     return last_returned;
 }
