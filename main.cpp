@@ -1,4 +1,5 @@
 #include <iostream>
+#include <set>
 #include <stdint.h>
 #include <vector>
 
@@ -8,57 +9,60 @@ int solve(int t) {
     int N, M, K, A, B;
     cin >> N >> M >> K >> A >> B;
 
-    vector campo(N, vector<int>(M));
-    // campo[x][y] => 0 <= x < N, 0 <= y < M
-    vector<int> c_righe(N);
+    vector count(N, vector(M, 0));
+    vector accumulated(N, vector(M, 0));
 
-    for (int i = 0; i < K; i++) {
+    for (int T = 0; T < K; T++) {
         int X, Y;
         cin >> X >> Y;
-        campo[X][Y]++;
-        c_righe[X]++;
+        count[X][Y]++;
     }
 
-    if (A == N && B == M) {
-        return K;
-    }
-
-    int somma_m = 0;
-    for (int r = 0; r < A; r++) {
-        somma_m += c_righe[r];
-    }
-    int somma_p = somma_m;
-    pair<int, int> range = {0, A}; // [0...A)
-    for (int r = 1; r <= N - A; r++) {
-        somma_p -= c_righe[r - 1];
-        somma_p += c_righe[r + A - 1];
-        if (somma_p < somma_m) {
-            somma_m = somma_p;
-            range = {r, r + A};
+    for (int r = 0; r < N; r++) {
+        accumulated[r][0] = count[r][0];
+        for (int c = 1; c < M; c++) {
+            accumulated[r][c] = accumulated[r][c - 1] + count[r][c];
         }
     }
 
-    vector<int> c_colonne(M);
-    for (int r = range.first; r < range.second; r++) {
+    for (int r = 1; r < N; r++) {
         for (int c = 0; c < M; c++) {
-            c_colonne[c] += campo[r][c];
-        }
-    }
-    int c_somma = 0;
-    for (int c = 0; c < B; c++) {
-        c_somma += c_colonne[c];
-    }
-    int c_somma_p = c_somma;
-    int c_somma_min = c_somma_p;
-    for (int c = 1; c <= M - B; c++) {
-        c_somma_p -= c_colonne[c - 1];
-        c_somma_p += c_colonne[c + B - 1];
-        if (c_somma_p < c_somma_min) {
-            c_somma_min = c_somma_p;
+            accumulated[r][c] += accumulated[r - 1][c];
         }
     }
 
-    return c_somma_min;
+    int min_tot = accumulated[A - 1][B - 1];
+
+    for (int a = 0; a <= N - A; a++) {
+        for (int b = 0; b <= M - B; b++) {
+            int cA, cB = 0, cC = 0, cD;
+            if (a == 0 || b == 0) {
+                cD = 0;
+                if (a == 0) {
+                    cC = 0;
+                }
+                else {
+                    cC = accumulated[a - 1][b + B - 1];
+                }
+                if (b == 0) {
+                    cB = 0;
+                }
+                else {
+                    cB = accumulated[a + A - 1][b - 1];
+                }
+            }
+            else {
+                cD = accumulated[a - 1][b - 1];
+                cC = accumulated[a - 1][b + B - 1];
+                cB = accumulated[a + A - 1][b - 1];
+            }
+            cA = accumulated[a + A - 1][b + B - 1];
+            int s = cA + cD - cB - cC;
+            if (s < min_tot) min_tot = s;
+        }
+    }
+
+    return min_tot;
 }
 
 int main() {
