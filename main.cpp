@@ -4,11 +4,14 @@
 
 using namespace std;
 
-int find_end_node(int start, vector<int>& end) {
-    while (end[start] != start) {
-        start = end[start];
+int find_end_node(int start, vector<int>& greater, vector<int>& memo) {
+    if (memo[start] != -1) return find_end_node(memo[start], greater, memo);
+    if (greater[start] == start) {
+        return greater[start];
     }
-    return start;
+    int res = find_end_node(greater[start], greater, memo);
+    memo[start] = res;
+    return res;
 }
 
 int main() {
@@ -33,7 +36,8 @@ int main() {
         children[p].push_back(i + 1);
     }
 
-    vector<int> end(N + 1);
+    vector<int> greater(N + 1);
+    vector memo(N + 1, -1);
     stack<int> v;
     v.push(0);
     while (!v.empty()) {
@@ -48,27 +52,27 @@ int main() {
                 maxN = c;
             }
         }
-        end[n] = maxN;
+        greater[n] = maxN;
     }
 
     int root = 0;
     int time = 0;
-    while (end[root] != root) {
-        int new_parent = end[root];
-        int end_node = find_end_node(new_parent, end);
+    while (greater[root] != root) {
+        int new_parent = greater[root];
+        int end_node = find_end_node(new_parent, greater, memo);
         auto it = children[root].begin();
         while (it != children[root].end()) {
             auto child = *it;
             if (child != new_parent) {
                 time += T[child - 1];
                 P[child - 1] = end_node;
-                end[end_node] = child;
+                greater[end_node] = child;
                 children[root].erase(it);
                 children[end_node].push_back(child);
-                end_node = find_end_node(end_node, end);
-            } else it++;
+                end_node = find_end_node(end_node, greater, memo);
+            } else ++it;
         }
-        root = end[root];
+        root = greater[root];
     }
 
     cout << time << endl;
