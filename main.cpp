@@ -2,49 +2,45 @@
 #include <iostream>
 #include <set>
 #include <fstream>
+#include <map>
 #include <vector>
 
 using namespace std;
 
-vector<int> r(int pos, int N, set<int>& used, vector<char>& S, vector<vector<int>>& memo)
-{
-    if (pos == N - 1) {
-        vector<int> res;
-        for (int i = 1; i <= N; i++) {
-            if (!used.count(i)) {
-                res.push_back(i);
-                break;
-            }
+void solve(int N, vector<char>& S) {
+    vector<int> A(N);
+    for (int i = 0; i < N; i++) {
+        A[i] = i + 1;
+    }
+    vector<int> map(N);
+    int i = 0;
+    while (i < N && S[i] == '<') i++;
+    // partiamo dalla posizione del primo segno >
+    int mp = 0;
+    for (int pos = i; pos < N - 1; pos++) {
+        // se il segno è diverso cambiamo slot
+        if (pos > i && S[pos] != S[pos - 1]) {
+            mp++;
+            map[mp] = 1;
         }
-        return res;
-    };
-
-    vector<int> perm;
-
-    for (int c = 1; c <= N; c++) {
-        if (!used.count(c)) {
-            if (pos == N - 1) {}
-            set newUsed(used);
-            newUsed.insert(c);
-            vector res = r(pos + 1, N, newUsed, S, memo);
-            if ((S[pos] == '>' && c > res[0]) || (S[pos] == '<' && c < res[0])) {
-                perm.push_back(c);
-                for (int i = 0; i < res.size(); i++) {
-                    perm.push_back(res[i]);
-                }
-                break;
-            }
+        else {
+            map[mp]++;
         }
     }
-
-    return perm;
+    // costruzione della mappa terminata
+    int mapPos = 0;
+    int pos = i;
+    while (pos < N - 1) {
+        reverse(A.begin() + pos, A.begin() + pos + map[mapPos] + 1);
+        pos += map[mapPos] + map[mapPos + 1];
+        mapPos += 2;
+    }
+    for (auto a : A) {
+        cout << a << ' ';
+    }
+    cout << endl;
 }
 
-vector<int> solve(int N, vector<char>& S) {
-    vector<vector<int>> memo(N);
-    set<int> used;
-    return r(0, N, used, S, memo);
-}
 
 int main() {
     freopen("input.txt", "r", stdin);
@@ -53,15 +49,12 @@ int main() {
     int N;
     cin >> N;
 
-    vector<char> S(N, 0);
+    vector<char> S(N - 1);
     for (int i = 0; i < N - 1; i++) {
         cin >> S[i];
     }
 
-    vector<int> res = solve(N, S);
-    for (auto n : res) {
-        cout << n << ' ';
-    }
+    solve(N, S);
 
     return 0;
 }
